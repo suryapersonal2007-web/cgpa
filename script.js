@@ -32,7 +32,8 @@ const semesters = {
         { name: "OOP Lab", credit: 1 },
         { name: "OOP", credit: 3 },
         { name: "Professional Development", credit: 1 },
-        { name: "Discrete Math", credit: 4 }
+        { name: "Discrete Math", credit: 4 },
+         {name : "naan muthalvan", credit :2}
     ],
     4: [
         { name: "Operating Systems", credit: 3 },
@@ -42,7 +43,8 @@ const semesters = {
         { name: "AI & ML", credit: 4 },
         { name: "DBMS", credit: 3 },
         { name: "Environmental Science", credit: 2 },
-        { name: "Web Essentials", credit: 4 }
+        { name: "Web Essentials", credit: 4 },
+        {name : "naan muthalvan", credit :2}
     ]
 };
 
