@@ -9,7 +9,6 @@
       background: #f4f4f4;
       padding: 20px;
     }
-```
 .container {
   max-width: 600px;
   margin: auto;
@@ -55,13 +54,25 @@ button:hover {
   text-align: center;
   font-weight: bold;
 }
-```
+
   </style>
 </head>
 <body>
 <div class="container">
   <h2>CGPA Calculator</h2>
+   <!-- 🔽 ADD SEMESTER SELECTION HERE -->
+  <div id="semester">
+    <h3>Select Semester</h3>
 
+    <label><input type="radio" name="sem" value="1" onchange="loadSemesterData(1)"> Semester 1</label><br>
+    <label><input type="radio" name="sem" value="2" onchange="loadSemesterData(2)"> Semester 2</label><br>
+    <label><input type="radio" name="sem" value="3" onchange="loadSemesterData(3)"> Semester 3</label><br>
+    <label><input type="radio" name="sem" value="4" onchange="loadSemesterData(4)"> Semester 4</label><br>
+    <label><input type="radio" name="sem" value="5" onchange="loadSemesterData(5)"> Semester 5</label><br>
+    <label><input type="radio" name="sem" value="6" onchange="loadSemesterData(6)"> Semester 6</label><br>
+    <label><input type='radio' name="sem" value="7" onchange="loadSemesterData(7)"> Semester 7</label> <br>
+    <label><input type='radio' name="sem" value="8" onchange="loadSemesterData(8)"> Semester 8</label>  <br>
+  </div>
   <div id="subjects"></div>
 
 <button onclick="addSubject()">Add Subject</button> <button onclick="calculateCGPA()">Calculate CGPA</button>
