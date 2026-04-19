@@ -1,31 +1,73 @@
-let subjectCount = 0;
+// 📚 Semester Data (your subjects + credits)
+const semesters = {
+  1: [
+    { name: "Physics and Chemistry Laboratory", credit: 2 },
+    { name: "Engineering Chemistry", credit: 3 },
+    { name: "Python Programming", credit: 3 },
+    { name: "Heritage of Tamils", credit: 1 },
+    { name: "Python Lab", credit: 2 },
+    { name: "English Lab", credit: 1 },
+    { name: "Professional English", credit: 3 },
+    { name: "Matrices and Calculus", credit: 4 },
+    { name: "Engineering Physics", credit: 3 }
+  ],
 
-// Add Subject Row
-function addSubject() {
-  subjectCount++;
+  2: [
+    { name: "Professional English II", credit: 2 },
+    { name: "Basic Electrical", credit: 3 },
+    { name: "Programming in C", credit: 3 },
+    { name: "C Lab", credit: 2 },
+    { name: "Engineering Graphics", credit: 4 },
+    { name: "Tamils and Technology", credit: 1 },
+    { name: "Engineering Practices Lab", credit: 2 },
+    { name: "Communication Lab", credit: 2 },
+    { name: "Statistics", credit: 4 },
+    { name: "Physics for IT", credit: 3 }
+  ],
 
-  const div = document.createElement("div");
-  div.className = "row";
+  3: [
+    { name: "DSA Lab", credit: 2 },
+    { name: "DSA", credit: 3 },
+    { name: "Digital Principles", credit: 4 },
+    { name: "Data Science", credit: 3 },
+    { name: "Data Science Lab", credit: 2 },
+    { name: "OOP Lab", credit: 1 },
+    { name: "OOP", credit: 3 },
+    { name: "Professional Development", credit: 1 },
+    { name: "Discrete Math", credit: 4 }
+  ],
 
-  div.innerHTML = `
-    <input class="subject" type="text" placeholder="Subject Name">
-    <input class="credit" type="number" placeholder="Credits" min="1">
+  4: [
+    { name: "Operating Systems", credit: 3 },
+    { name: "Theory of Computation", credit: 3 },
+    { name: "OS Lab", credit: 1 },
+    { name: "DBMS Lab", credit: 1 },
+    { name: "AI & ML", credit: 4 },
+    { name: "DBMS", credit: 3 },
+    { name: "Environmental Science", credit: 2 },
+    { name: "Web Essentials", credit: 4 }
+  ]
+};
 
-    <select class="grade">
-      <option value="">Grade</option>
-      <option value="10">O (10)</option>
-      <option value="9">A+ (9)</option>
-      <option value="8">A (8)</option>
-      <option value="7">B+ (7)</option>
-      <option value="6">B (6)</option>
-      <option value="5">C (5)</option>
-      <option value="0">F (0)</option>
-    </select>
+// Load subjects when semester selected
+function loadSubjects(sem) {
+  const container = document.getElementById("subjects");
+  container.innerHTML = "";
 
-    <button class="remove-btn" onclick="this.parentElement.remove()">❌</button>
-  `;
+  if (!sem || !semesters[sem]) return;
 
-  document.getElementById("subjects").appendChild(div);
+  semesters[sem].forEach(sub => {
+    const div = document.createElement("div");
+    div.className = "row";
+
+    div.innerHTML = `
+      <input value="${sub.name}" disabled>
+      <input value="${sub.credit}" disabled>
+      <input type="number" min="0" max="10" placeholder="Grade (0-10)" class="grade">
+    `;
+
+    container.appendChild(div);
+  });
 }
 
 // Calculate CGPA
@@ -34,108 +76,26 @@ function calculateCGPA() {
 
   let totalCredits = 0;
   let totalPoints = 0;
-  let output = [];
-  let subjectsData = [];
-
-  const semester = document.querySelector('input[name="sem"]:checked');
-
-  if (!semester) {
-    document.getElementById("result").innerHTML = "⚠️ Select a semester!";
-    return;
-  }
 
   rows.forEach(row => {
-    const subject = row.querySelector(".subject").value;
-    const credit = parseFloat(row.querySelector(".credit").value);
-    const grade = parseFloat(row.querySelector(".grade").value);
+    const inputs = row.querySelectorAll("input");
 
-    if (subject && !isNaN(credit) && !isNaN(grade)) {
+    const credit = parseFloat(inputs[1].value);
+    const grade = parseFloat(inputs[2].value);
+
+    // Validation
+    if (!isNaN(grade) && grade >= 0 && grade <= 10) {
       totalCredits += credit;
       totalPoints += credit * grade;
-
-      output.push(`${subject} (${credit} credits) → ${credit * grade} points`);
-
-      subjectsData.push({ subject, credit, grade });
     }
   });
 
   if (totalCredits === 0) {
-    document.getElementById("result").innerHTML = "Enter valid data!";
+    document.getElementById("result").innerText = "⚠️ Enter valid grades!";
     return;
   }
 
   const cgpa = (totalPoints / totalCredits).toFixed(2);
 
-  // Save data
-  const data = {
-    semester: semester.value,
-    subjects: subjectsData,
-    cgpa: cgpa
-  };
-
-  localStorage.setItem("semester_" + semester.value, JSON.stringify(data));
-
-  document.getElementById("result").innerHTML =
-    `<strong>Semester ${semester.value}</strong><br><br>` +
-    output.join("<br>") +
-    `<br><br><strong>CGPA: ${cgpa}</strong>`;
+  document.getElementById("result").innerText = "CGPA: " + cgpa;
 }
-
-// Load Saved Semester Data
-function loadSemesterData(sem) {
-  const saved = localStorage.getItem("semester_" + sem);
-
-  const container = document.getElementById("subjects");
-  container.innerHTML = "";
-
-  if (!saved) return;
-
-  const data = JSON.parse(saved);
-
-  data.subjects.forEach(sub => {
-    addSubject();
-
-    const lastRow = container.lastElementChild;
-
-    lastRow.querySelector(".subject").value = sub.subject;
-    lastRow.querySelector(".credit").value = sub.credit;
-    lastRow.querySelector(".grade").value = sub.grade;
-  });
-
-  document.getElementById("result").innerHTML =
-    `Loaded Semester ${sem} CGPA: <strong>${data.cgpa}</strong>`;
-}
-
-// Overall CGPA
-function calculateOverallCGPA() {
-  let total = 0;
-  let count = 0;
-
-  for (let i = 1; i <= 6; i++) {
-    const data = localStorage.getItem("semester_" + i);
-
-    if (data) {
-      const parsed = JSON.parse(data);
-      total += parseFloat(parsed.cgpa);
-      count++;
-    }
-  }
-
-  if (count === 0) {
-    alert("No data found!");
-    return;
-  }
-
-  const overall = (total / count).toFixed(2);
-  alert("Overall CGPA: " + overall);
-}
-
-// Default subjects on load
-window.onload = () => {
-  addSubject();
-  addSubject();
-  addSubject();
-  addSubject();
-  addSubject();
-  addSubject();
-};

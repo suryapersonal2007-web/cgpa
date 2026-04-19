@@ -1,83 +1,114 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>CGPA CALCULATOR</title>
+  <title>CGPA Calculator</title>
+
   <style>
     body {
-      font-family: Arial;
+      font-family: Arial, sans-serif;
       background: #f4f4f4;
       padding: 20px;
     }
-.container {
-  max-width: 600px;
-  margin: auto;
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px #ccc;
-}
 
-h2 {
-  text-align: center;
-}
+    .container {
+      max-width: 750px;
+      margin: auto;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ccc;
+    }
 
-.row {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-}
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
-input, select {
-  padding: 8px;
-  flex: 1;
-}
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+    }
 
-button {
-  padding: 10px;
-  margin-top: 10px;
-  width: 100%;
-  cursor: pointer;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-}
+    .row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
 
-button:hover {
-  background: #0056b3;
-}
+    .row input {
+      padding: 8px;
+      flex: 1;
+    }
 
-.result {
-  margin-top: 15px;
-  font-size: 18px;
-  text-align: center;
-  font-weight: bold;
-}
+    .header {
+      font-weight: bold;
+      background: #eee;
+      padding: 5px;
+    }
 
+    button {
+      padding: 12px;
+      margin-top: 10px;
+      width: 100%;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      text-align: center;
+      font-weight: bold;
+    }
   </style>
+
 </head>
+
 <body>
+
 <div class="container">
   <h2>CGPA Calculator</h2>
-   <!-- 🔽 ADD SEMESTER SELECTION HERE -->
-  <div id="semester">
-    <h3>Select Semester</h3>
 
-    <label><input type="radio" name="sem" value="1" onchange="loadSemesterData(1)"> Semester 1</label><br>
-    <label><input type="radio" name="sem" value="2" onchange="loadSemesterData(2)"> Semester 2</label><br>
-    <label><input type="radio" name="sem" value="3" onchange="loadSemesterData(3)"> Semester 3</label><br>
-    <label><input type="radio" name="sem" value="4" onchange="loadSemesterData(4)"> Semester 4</label><br>
-    <label><input type="radio" name="sem" value="5" onchange="loadSemesterData(5)"> Semester 5</label><br>
-    <label><input type="radio" name="sem" value="6" onchange="loadSemesterData(6)"> Semester 6</label><br>
-    <label><input type='radio' name="sem" value="7" onchange="loadSemesterData(7)"> Semester 7</label> <br>
-    <label><input type='radio' name="sem" value="8" onchange="loadSemesterData(8)"> Semester 8</label>  <br>
+  <!-- Semester Dropdown -->
+
+  <select onchange="loadSubjects(this.value)">
+    <option value="">Select Semester</option>
+    <option value="1">Semester 1</option>
+    <option value="2">Semester 2</option>
+    <option value="3">Semester 3</option>
+    <option value="4">Semester 4</option>
+  </select>
+
+  <!-- Header Row -->
+
+  <div class="row header">
+    <div>Subject</div>
+    <div>Credits</div>
+    <div>Grade</div>
   </div>
+
+  <!-- Subjects will load here -->
+
   <div id="subjects"></div>
 
-<button onclick="addSubject()">Add Subject</button> <button onclick="calculateCGPA()">Calculate CGPA</button>
+  <!-- Button -->
 
-  <div class="result" id="result"></div>
+<button onclick="calculateCGPA()">Calculate CGPA</button>
+
+  <!-- Result -->
+
+  <div id="result"></div>
 </div>
 
 <script src="script.js"></script>
