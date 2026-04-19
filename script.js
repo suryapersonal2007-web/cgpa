@@ -46,34 +46,38 @@ const semesters = {
     ]
 };
 
-// Load Subjects when semester changes
-function loadSubjects() {
-    const sem = document.getElementById("semester").value;
+/**
+ * Load Subjects when semester changes
+ * 'sem' is passed directly from the HTML: loadSubjects(this.value)
+ */
+function loadSubjects(sem) {
     const container = document.getElementById("subjects");
     const result = document.getElementById("result");
 
+    // Clear previous subjects and old results
     container.innerHTML = "";
     result.innerText = "";
 
-    // Check valid semester
+    // If "Select Semester" (empty value) is picked, stop here
     if (!sem || !semesters[sem]) return;
 
     semesters[sem].forEach(sub => {
         const div = document.createElement("div");
         div.className = "row";
 
-        // Fixed: Removed the triple backticks and correctly formatted the template literal
         div.innerHTML = `
-            <input type="text" value="${sub.name}" disabled style="width: 250px;">
-            <input type="number" class="credit" value="${sub.credit}" disabled style="width: 40px;">
-            <input type="number" class="grade" min="0" max="10" placeholder="Grade (0-10)">
+            <input type="text" value="${sub.name}" disabled>
+            <input type="number" class="credit" value="${sub.credit}" disabled>
+            <input type="number" class="grade" min="0" max="10" placeholder="Enter Grade">
         `;
 
         container.appendChild(div);
     });
 }
 
-// Calculate GPA/CGPA
+/**
+ * Calculate the GPA for the loaded rows
+ */
 function calculateCGPA() {
     const rows = document.querySelectorAll("#subjects .row");
     const result = document.getElementById("result");
@@ -81,9 +85,9 @@ function calculateCGPA() {
     let totalCredits = 0;
     let totalPoints = 0;
 
-    // Check if semester is selected
+    // Check if subjects are loaded
     if (rows.length === 0) {
-        result.innerText = "⚠️ Please select a semester first!";
+        result.innerHTML = "⚠️ Please select a semester first!";
         return;
     }
 
@@ -91,24 +95,24 @@ function calculateCGPA() {
         const creditEl = row.querySelector(".credit");
         const gradeEl = row.querySelector(".grade");
 
-        if (!creditEl || !gradeEl) return;
+        if (creditEl && gradeEl) {
+            const credit = parseFloat(creditEl.value);
+            const grade = parseFloat(gradeEl.value);
 
-        const credit = parseFloat(creditEl.value);
-        const grade = parseFloat(gradeEl.value);
-
-        // Validate grade is between 0 and 10
-        if (!isNaN(grade) && grade >= 0 && grade <= 10) {
-            totalCredits += credit;
-            totalPoints += credit * grade;
+            // validate grade input
+            if (!isNaN(grade) && grade >= 0 && grade <= 10) {
+                totalCredits += credit;
+                totalPoints += credit * grade;
+            }
         }
     });
 
-    // No valid grades entered
+    // Check if user actually typed any grades
     if (totalCredits === 0) {
-        result.innerText = "⚠️ Enter valid grades (0–10)!";
+        result.innerHTML = "⚠️ Enter valid grades (0–10) to calculate!";
         return;
     }
 
-    const cgpa = (totalPoints / totalCredits).toFixed(2);
-    result.innerText = "🎯 Result: " + cgpa;
+    const gpa = (totalPoints / totalCredits).toFixed(2);
+    result.innerHTML = "🎯 Your GPA: " + gpa;
 }
