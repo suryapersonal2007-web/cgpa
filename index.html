@@ -3,11 +3,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>CGPA Calculator</title>
+  <title>CGPA Tracker</title>
 
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: Arial;
       background: #f4f4f4;
       padding: 20px;
     }
@@ -15,21 +15,16 @@
     .container {
       max-width: 750px;
       margin: auto;
-      background: #ffffff;
+      background: white;
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 0 10px #ccc;
     }
 
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    select {
-      width: 100%;
+    input, select, button {
       padding: 10px;
-      margin-bottom: 15px;
+      margin: 5px 0;
+      width: 100%;
     }
 
     .row {
@@ -39,7 +34,6 @@
     }
 
     .row input {
-      padding: 8px;
       flex: 1;
     }
 
@@ -49,27 +43,11 @@
       padding: 5px;
     }
 
-    button {
-      padding: 12px;
-      margin-top: 10px;
-      width: 100%;
-      background: #007bff;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    button:hover {
-      background: #0056b3;
-    }
-
     #result {
-      margin-top: 20px;
+      margin-top: 15px;
       font-size: 18px;
-      text-align: center;
       font-weight: bold;
+      text-align: center;
     }
   </style>
 
@@ -77,12 +55,23 @@
 
 <body>
 
-<div class="container">
-  <h2>CGPA Calculator</h2>
+<!-- 🔐 LOGIN -->
 
-  <!-- Semester Dropdown -->
+<div id="loginBox" class="container">
+  <h2>Login</h2>
+  <input type="text" id="username" placeholder="Enter username">
+  <button onclick="login()">Login</button>
+</div>
 
-  <select onchange="loadSubjects(this.value)">
+<!-- 📊 MAIN APP -->
+
+<div id="app" class="container" style="display:none;">
+
+  <h2>CGPA Tracker</h2>
+
+<button onclick="logout()">Logout</button>
+
+  <select id="semester" onchange="loadSubjects()">
     <option value="">Select Semester</option>
     <option value="1">Semester 1</option>
     <option value="2">Semester 2</option>
@@ -90,25 +79,18 @@
     <option value="4">Semester 4</option>
   </select>
 
-  <!-- Header Row -->
-
   <div class="row header">
     <div>Subject</div>
     <div>Credits</div>
     <div>Grade</div>
   </div>
 
-  <!-- Subjects will load here -->
-
   <div id="subjects"></div>
-
-  <!-- Button -->
 
 <button onclick="calculateCGPA()">Calculate CGPA</button>
 
-  <!-- Result -->
-
   <div id="result"></div>
+
 </div>
 
 <script src="script.js"></script>
