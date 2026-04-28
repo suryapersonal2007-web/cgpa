@@ -1,75 +1,70 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>CGPA Tracker</title>
+<meta charset="UTF-8">
+<title>CGPA Tracker</title>
 
-  <style>
-    body {
-      font-family: Arial;
-      background: #f4f4f4;
-      padding: 20px;
-    }
+<style>
+  body {
+    font-family: Arial;
+    background: #f4f4f4;
+    padding: 20px;
+  }
 
-    .container {
-      max-width: 750px;
-      margin: auto;
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #ccc;
-    }
+  .container {
+    max-width: 750px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #ccc;
+  }
 
-    input, select, button {
-      padding: 10px;
-      margin: 5px 0;
-      width: 100%;
-    }
+  input, select, button {
+    padding: 10px;
+    margin: 5px 0;
+    width: 100%;
+  }
 
-    .row {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
+  .row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
 
-    .row input {
-      flex: 1;
-    }
+  .row input {
+    flex: 1;
+  }
 
-    .header {
-      font-weight: bold;
-      background: #eee;
-      padding: 5px;
-    }
+  .header {
+    font-weight: bold;
+    background: #eee;
+    padding: 5px;
+  }
 
-    #result {
-      margin-top: 15px;
-      font-size: 18px;
-      font-weight: bold;
-      text-align: center;
-    }
-  </style>
-
+  #result {
+    margin-top: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+  }
+</style>
 </head>
 
 <body>
 
-<!-- 🔐 LOGIN -->
-
+<!-- LOGIN -->
 <div id="loginBox" class="container">
   <h2>Login</h2>
   <input type="text" id="username" placeholder="Enter username">
   <button onclick="login()">Login</button>
 </div>
 
-<!-- 📊 MAIN APP -->
-
+<!-- APP -->
 <div id="app" class="container" style="display:none;">
-
   <h2>CGPA Tracker</h2>
 
-<button onclick="logout()">Logout</button>
+  <button onclick="logout()">Logout</button>
 
   <select id="semester" onchange="loadSubjects()">
     <option value="">Select Semester</option>
@@ -87,13 +82,148 @@
 
   <div id="subjects"></div>
 
-<button onclick="calculateCGPA()">Calculate CGPA</button>
+  <button onclick="calculateCGPA()">Calculate CGPA</button>
 
   <div id="result"></div>
-
 </div>
 
-<script src="script.js"></script>
+<script>
+// 👤 Current user
+let currentUser = "";
+
+// 📚 Semester Data
+const semesters = {
+  1: [
+    { name: "Physics and Chemistry Laboratory", credit: 2 },
+    { name: "Engineering Chemistry", credit: 3 },
+    { name: "Python Programming", credit: 3 },
+    { name: "Heritage of Tamils", credit: 1 },
+    { name: "Python Lab", credit: 2 },
+    { name: "English Lab", credit: 1 },
+    { name: "Professional English", credit: 3 },
+    { name: "Matrices and Calculus", credit: 4 },
+    { name: "Engineering Physics", credit: 3 }
+  ],
+  2: [
+    { name: "Professional English II", credit: 2 },
+    { name: "Basic Electrical", credit: 3 },
+    { name: "Programming in C", credit: 3 },
+    { name: "C Lab", credit: 2 },
+    { name: "Engineering Graphics", credit: 4 },
+    { name: "Tamils and Technology", credit: 1 },
+    { name: "Engineering Practices Lab", credit: 2 },
+    { name: "Communication Lab", credit: 2 },
+    { name: "Statistics", credit: 4 },
+    { name: "Physics for IT", credit: 3 }
+  ],
+  3: [
+    { name: "DSA Lab", credit: 2 },
+    { name: "DSA", credit: 3 },
+    { name: "Digital Principles", credit: 4 },
+    { name: "Data Science", credit: 3 },
+    { name: "Data Science Lab", credit: 2 },
+    { name: "OOP Lab", credit: 1 },
+    { name: "OOP", credit: 3 },
+    { name: "Professional Development", credit: 1 },
+    { name: "Discrete Math", credit: 4 }
+  ],
+  4: [
+    { name: "Operating Systems", credit: 3 },
+    { name: "Theory of Computation", credit: 3 },
+    { name: "OS Lab", credit: 1 },
+    { name: "DBMS Lab", credit: 1 },
+    { name: "AI & ML", credit: 4 },
+    { name: "DBMS", credit: 3 },
+    { name: "Environmental Science", credit: 2 },
+    { name: "Web Essentials", credit: 4 }
+  ]
+};
+
+// 🔐 Login
+function login() {
+  const username = document.getElementById("username").value.trim();
+
+  if (!username) {
+    alert("Enter username!");
+    return;
+  }
+
+  currentUser = username;
+  localStorage.setItem("currentUser", currentUser);
+
+  document.getElementById("loginBox").style.display = "none";
+  document.getElementById("app").style.display = "block";
+}
+
+// 🔓 Logout
+function logout() {
+  localStorage.removeItem("currentUser");
+  location.reload();
+}
+
+// 🔄 Auto login
+window.addEventListener("DOMContentLoaded", () => {
+  const savedUser = localStorage.getItem("currentUser");
+
+  if (savedUser) {
+    currentUser = savedUser;
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("app").style.display = "block";
+  }
+});
+
+// 📚 Load Subjects
+function loadSubjects() {
+  const sem = document.getElementById("semester").value;
+  const container = document.getElementById("subjects");
+  const result = document.getElementById("result");
+
+  container.innerHTML = "";
+  result.innerText = "";
+
+  if (!sem || !semesters[sem]) return;
+
+  semesters[sem].forEach(sub => {
+    const div = document.createElement("div");
+    div.className = "row";
+
+    div.innerHTML = `
+      <input type="text" value="${sub.name}" disabled>
+      <input type="number" class="credit" value="${sub.credit}" disabled>
+      <input type="number" class="grade" min="0" max="10" placeholder="Grade">
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+// 📊 Calculate CGPA
+function calculateCGPA() {
+  const rows = document.querySelectorAll("#subjects .row");
+  const result = document.getElementById("result");
+
+  let totalCredits = 0;
+  let totalPoints = 0;
+
+  rows.forEach(row => {
+    const credit = parseFloat(row.querySelector(".credit").value);
+    const grade = parseFloat(row.querySelector(".grade").value);
+
+    if (!isNaN(grade)) {
+      totalCredits += credit;
+      totalPoints += credit * grade;
+    }
+  });
+
+  if (totalCredits === 0) {
+    result.innerText = "⚠️ Enter valid grades!";
+    return;
+  }
+
+  const cgpa = (totalPoints / totalCredits).toFixed(2);
+  result.innerText = "🎯 CGPA: " + cgpa;
+}
+</script>
 
 </body>
 </html>
