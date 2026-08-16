@@ -157,10 +157,40 @@ button:active {
 
 
 /* Grade */
-.row .grade {
+/* Grade Dropdown */
+.grade {
   flex: 0.8;
+  cursor: pointer;
 
-  border-color: #a78bfa;
+  padding: 13px 15px;
+
+  border: 2px solid #a78bfa;
+  border-radius: 10px;
+
+  background: #faf5ff;
+  color: #4c1d95;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  outline: none;
+
+  transition: 0.3s;
+}
+
+
+/* Grade Dropdown Focus */
+.grade:focus {
+  border-color: #7c3aed;
+
+  box-shadow:
+    0 0 8px rgba(124, 58, 237, 0.3);
+}
+
+
+/* Grade Dropdown Hover */
+.grade:hover {
+  border-color: #7c3aed;
 }
 
 
