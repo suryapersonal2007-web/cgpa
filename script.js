@@ -99,8 +99,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
 });
 
-
-// Load Subjects
 function loadSubjects() {
 
   const sem = document.getElementById("semester").value;
@@ -138,13 +136,16 @@ function loadSubjects() {
         disabled
       >
 
-      <input
-        type="number"
-        class="grade"
-        min="0"
-        max="10"
-        placeholder="Grade"
-      >
+      <select class="grade">
+        <option value="">Select Grade</option>
+        <option value="10">O</option>
+        <option value="9">A+</option>
+        <option value="8">A</option>
+        <option value="7">B+</option>
+        <option value="6">B</option>
+        <option value="5">C</option>
+        <option value="0">U</option>
+      </select>
     `;
 
     container.appendChild(div);
